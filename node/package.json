@@ -1,0 +1,16 @@
+{
+  "name": "family-tree",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.3.0",
+    "mongoose": "^4.4.2",
+    "orientjs": "^2.1.0"
+  }
+}

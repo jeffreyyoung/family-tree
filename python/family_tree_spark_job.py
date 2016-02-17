@@ -1,5 +1,9 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+from __future__ import print_function
+
+import sys
+from operator import add
+
+from pyspark import SparkContext
 import json
 
 
@@ -24,10 +28,10 @@ class RELATIONSHIP_TYPES:
 def get_person_info(line):
 
     def encode(text):
-    	try:
-        	return text.decode('utf-8')
+        try:
+            return text.decode('utf-8')
         except:
-        	return "encode error"
+            return "encode error"
 
     def getId(person):
         return str(person.get('id'))
@@ -76,3 +80,18 @@ def get_person_info(line):
     person = getPerson(person_id, persons)
     info = getFactInfo(person, places, FACT_TYPES.DEATH_FACT)
     return encode(str(info['date'])) + "::" + encode(str(info['place']))
+
+
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print('Usage: wordcount <file>', file=sys.stderr)
+        exit(-1)
+    sc = SparkContext(appName='PythonWordCount')
+    lines = sc.textFile(sys.argv[1], 1)
+    counts = lines.map(lambda x: (get_person_info(x), 1))\
+        .reduceByKey(add)
+    output = counts.collect()
+    for (word, count) in output:
+        print('%s: %i' % (word, count))
+
+    sc.stop()

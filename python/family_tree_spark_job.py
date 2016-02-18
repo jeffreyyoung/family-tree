@@ -75,8 +75,9 @@ def get_person_info(line):
 
     def extractYearFromDate(data):
         try:
-            data = str(data)
-            return str(dateParser.parse(data).year)
+            year = dateParser.parse(data).year
+            roundedDate = int(50 * round(float(year)/50))
+            return str(roundedDate)
         except:
             return data
     def extractCountryFromPlace(place):

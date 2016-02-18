@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import sys
 from operator import add
-
+import dateutil.parser as dateParser
 from pyspark import SparkContext
 import json
 
@@ -72,6 +72,19 @@ def get_person_info(line):
             return info
         fact = getFact(person.get('facts'), fact_type)
         return getDateAndPlace(fact)
+
+    def extractYearFromDate(data):
+        try:
+            data = str(data)
+            return str(dateParser.parse(data).year)
+        except:
+            return data
+    def extractCountryFromPlace(place):
+        try:
+            places = place.split(',')
+            return places[ len(places) - 1].strip()
+        except:
+            return place
     person_id = line[:23]
     data = json.loads(line[24:])
     persons = data.get('persons')
@@ -79,7 +92,7 @@ def get_person_info(line):
     relationships = data.get('relationships')
     person = getPerson(person_id, persons)
     info = getFactInfo(person, places, FACT_TYPES.DEATH_FACT)
-    return encode(str(info['date'])) + "::" + encode(str(info['place']))
+    return encode(extractYearFromDate(str(info['date']))) + "::" + encode(str(extractCountryFromPlace(info['place'])))
 
 
 if __name__ == '__main__':

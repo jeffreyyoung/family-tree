@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.3.0",
-    "mongoose": "^4.4.2",
+    "mongoose": "^5.7.7",
     "orientjs": "^2.1.0"
   }
 }
